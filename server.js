@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const logger = require('./middleware/logger');
+const errorHandler = require('./middleware/error');
+const morgan = require('morgan');
 
 // load env variables
 dotenv.config({ path: './config/config.env' });
@@ -14,9 +16,15 @@ const app = express();
 // body parser
 app.use(express.json());
 
+// Dev logging middleware
+if(process.env.NODE_ENV === 'development'){
+  app.use(morgan('dev'));
+}
+
+
 // below line indicates that the created middleware is ready to use
 // below line er jonne all controller function a middleware variables gular access pabo
-app.use(logger);
+// app.use(logger);
 // end of middleware
 
 // initilizing routes
@@ -30,6 +38,7 @@ app.get('/', (req, res) => {
 // route files
 const bootcamps = require('./routes/bootcamps.js');
 app.use('/api/v1/bootcamps', bootcamps);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
