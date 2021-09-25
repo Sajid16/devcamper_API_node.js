@@ -131,7 +131,7 @@ BootcampSchema.pre('save', async function (next) {
     country: loc[0].countryCode,
   };
 
-//   // Do not save address in DB
+  // Do not save address in DB
   this.address = undefined;
   next();
 });
